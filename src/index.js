@@ -12,7 +12,7 @@ Flickr.onLoad(photos => {
   log.info('photos', photos);
 
   photos.forEach(photo => {
-    addImage(dom.img(photo.media.m, photo.title));
+    addImage(dom.img(photo.sources.small, photo.title));
   });
 });
 

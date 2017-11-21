@@ -17,11 +17,21 @@ class Flickr {
     // Handle jsonp callback from this.fetch
     window.jsonFlickrFeed = data => {
       log.info('handleFlickrJSON', data);
-      this.state.photos.push(...data.items);
+
+      // Convert api data to model
+      this.state.photos = data.items.map(this.photo);
       this.state.isLoaded = true;
 
       this.listeners.forEach(listener => listener(this.state.photos));
     };
+  }
+
+  photo(photo) {
+    const small = photo.media.m
+    const large = small.replace(/_m\.jpg/, '_b.jpg');
+    const title = photo.title;
+
+    return { sources: { small, large }, title };
   }
 
   search(search) {
