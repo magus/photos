@@ -1,27 +1,45 @@
 // @flow
-import utils from 'utils';
-import { list } from '../../../Library/Caches/typescript/2.6/node_modules/postcss';
+import { dom, log } from 'utils';
 
+const API_ENDPOINT = 'https://api.flickr.com/services/feeds/photos_public.gne?format=json';
 class Flickr {
   constructor() {
-    this.isLoaded = false;
-    this.photos = [];
     this.listeners = [];
 
-    // https://api.flickr.com/services/feeds/photos_public.gne?format=json
-    // Handle jsonp callback from index.html script tag
-    window.jsonFlickrFeed = data => {
-      utils.info('handleFlickrJSON', data);
-      this.photos.push(...data.items);
-      this.isLoaded = true;
-
-      this.listeners.forEach(listener => listener(this.photos));
+    // State
+    this.state = {
+      search: null,
+      isLoaded: false,
+      photos: [],
     };
+
+    // https://api.flickr.com/services/feeds/photos_public.gne?format=json
+    // Handle jsonp callback from this.fetch
+    window.jsonFlickrFeed = data => {
+      log.info('handleFlickrJSON', data);
+      this.state.photos.push(...data.items);
+      this.state.isLoaded = true;
+
+      this.listeners.forEach(listener => listener(this.state.photos));
+    };
+  }
+
+  search(search) {
+    this.state.search = search;
+    this.state.photos = [];
+    this.state.isLoaded = false;
+
+    this.fetch();
+  }
+
+  fetch() {
+    const endpoint = `${API_ENDPOINT}&tags=${this.state.search}`;
+    document.head.appendChild(dom.script(endpoint));
   }
 
   // Register listener to handle loaded photos
   onLoad(listener) {
-    if (this.isLoaded) listener(this.photos);
+    if (this.state.isLoaded) listener(this.state.photos);
 
     this.listeners.push(listener);
   }
