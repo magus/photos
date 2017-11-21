@@ -22,8 +22,12 @@ class Flickr {
       this.state.photos = data.items.map(this.photo);
       this.state.isLoaded = true;
 
-      this.listeners.forEach(listener => listener(this.state.photos));
+      this.listeners.forEach(listener => this.notifyListener(listener));
     };
+  }
+
+  notifyListener(listener) {
+    listener(this.state.photos, this.state.search);
   }
 
   photo(photo) {
@@ -49,9 +53,9 @@ class Flickr {
 
   // Register listener to handle loaded photos
   onLoad(listener) {
-    if (this.state.isLoaded) listener(this.state.photos);
-
     this.listeners.push(listener);
+
+    if (this.state.isLoaded) this.notifyListener(listener);
   }
 }
 
