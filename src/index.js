@@ -8,8 +8,11 @@ function addImage(img) {
   CONTAINER.appendChild(img);
 }
 
-Flickr.onLoad(photos => {
-  log.info('photos', photos);
+Flickr.onLoad((photos, search) => {
+  // Clear existing images
+  CONTAINER.innerHTML = null;
+
+  log.info(search, photos);
 
   photos.forEach(photo => {
     addImage(dom.img(photo.sources.small, photo.title));
@@ -17,3 +20,5 @@ Flickr.onLoad(photos => {
 });
 
 Flickr.search('cats');
+
+setTimeout(() => Flickr.search('dogs'), 5000);
