@@ -1,12 +1,13 @@
+//@flow
 import Flickr from 'Flickr';
 import utils from 'utils';
 
+const CONTAINER = document.getElementById('photos');
 
-const CONTAINER = document.getElementById('container');
-
-function img(src) {
+function img(photo) {
   const element = document.createElement('img');
-  element.src = src;
+  element.src = photo.media.m;
+  element.title = photo.title;
   return element;
 }
 
@@ -18,6 +19,6 @@ Flickr.onLoad(photos => {
   utils.info('photos', photos);
 
   photos.forEach(photo => {
-    addImage(img(photo.media.m));
+    addImage(img(photo));
   });
 });
