@@ -15,7 +15,8 @@ Flickr.onLoad((photos, search) => {
   log.info(search, photos);
 
   photos.forEach(photo => {
-    addImage(dom.img(photo.sources.small, photo.title));
+    const img = dom.img(photo.sources.small, photo.title);
+    addImage(img);
   });
 });
 
