@@ -16,4 +16,11 @@ module.exports = {
     filename: '[name].bundle.js',
     path: path.resolve('dist'),
   },
+
+  resolve: {
+    modules: [
+      path.join('src'),
+      path.join('node_modules'),
+    ],
+  },
 };

@@ -1,7 +1,11 @@
 # photos
+- (dev) `yarn start`
+- (prod) `yarn build`, commit and push
 
-# TODO
-- Minify JS and CSS
+# In an ideal world...
+...with more time, a more complex app, etc.
+- Super simple loading all styles inline, in complex app ideally load styles related to what we need to display only
+
 
 # Instructions
 - Photo API

@@ -1,6 +1,6 @@
-import utils from './utils';
+import Flickr from 'Flickr';
+import utils from 'utils';
 
-utils.log('blah');
-
-const five = 25;
-utils.warn('five', five);
+Flickr.onLoad(photos => {
+  utils.info('photos', photos);
+});
