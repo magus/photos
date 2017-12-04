@@ -18,6 +18,37 @@ export const dom = {
     return element;
   },
 
+  swipe: (area, onSwipe) => {
+    const coords = {
+      sx: 0,
+      sy: 0,
+      ex: 0,
+      ey: 0,
+    };
+
+    function calculateSwipe() {
+      const { sx, sy, ex, ey } = coords;
+
+      if (ex < sx) return onSwipe('left');
+      if (ex > sx) return onSwipe('right');
+      if (ey < sy) return onSwipe('down');
+      if (ey > sy) return onSwipe('up');
+
+      return onSwipe('tap');
+    }
+
+    area.addEventListener('touchstart', (event) => {
+      coords.sx = event.changedTouches[0].screenX;
+      coords.sy = event.changedTouches[0].screenY;
+    }, false);
+
+    area.addEventListener('touchend', (event) => {
+      coords.ex = event.changedTouches[0].screenX;
+      coords.ey = event.changedTouches[0].screenY;
+      calculateSwipe();
+    }, false);
+  },
+
 };
 
 export const log = {};

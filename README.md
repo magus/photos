@@ -2,16 +2,17 @@
 - (dev) `yarn start`
 - (prod) `yarn build`, commit and push
 
+# Features
+- Click photo to view in lightbox
+- Mobile swipe left and right
+- Desktop left and right arrow keys
+
 # Tasks
 - API to promise all when all images are (loaded or timeout) (promise race)
 - Photos overaly fade out when images loaded
 - PhotoViewManager
-  - Handle loading all images and currently selected image
-  - Left Right arrow handlers
-  - onClick image -> select image
     - Lightbox (shows currently selected image)
     - Left Right click handlers along entire vertical side of lightbox
-  - left/right Swipe handlers
 
 
 # In an ideal world...

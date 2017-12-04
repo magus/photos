@@ -24,6 +24,9 @@ export default class PhotoViewManager {
       photos.forEach(photo => {
         const img = dom.img(photo.sources.small, photo.title);
         this.container.appendChild(img);
+
+        // Select first image by default
+        if (!this.state.selected) this.state.selected = img;
       });
     });
 
@@ -46,6 +49,18 @@ export default class PhotoViewManager {
         console.debug('next');
         this.showLightbox(this.state.selected.nextSibling);
       } else if (event.key === 'ArrowLeft') {
+        console.debug('prev');
+        this.showLightbox(this.state.selected.previousSibling);
+      }
+    });
+
+    dom.swipe(document.body, (swipeDir) => {
+      console.debug('swipeDir', swipeDir);
+
+      if (swipeDir === 'left') {
+        console.debug('next');
+        this.showLightbox(this.state.selected.nextSibling);
+      } else if (swipeDir === 'right') {
         console.debug('prev');
         this.showLightbox(this.state.selected.previousSibling);
       }
