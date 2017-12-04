@@ -15,6 +15,7 @@ export default class PhotoViewManager {
     this.lightbox = props.lightbox;
     this.lightboxImage = props.lightbox.querySelector('img');
     this.lightboxShadow = props.lightbox.querySelector('#lightbox-shadow');
+    this.lightboxTitle = props.lightbox.querySelector('#lightbox-title');
 
     // state
     this.state = {
@@ -95,6 +96,8 @@ export default class PhotoViewManager {
 
     const photo = this.state.photos[index];
     if (!photo) return console.error('invalid photo');
+
+    this.lightboxTitle.innerHTML = photo.title || '(untitled)';
 
     // Get large image for lightbox
     onImageLoad(photo.sources.large, (src) => {
