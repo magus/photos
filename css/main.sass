@@ -11,3 +11,23 @@ body
   img
     cursor: pointer
     margin: 16px
+
+
+#lightbox
+  background-color: blue
+
+  pointer-events: none
+  opacity: 0
+  transition: 0.2s ease-in-out opacity
+
+  position: absolute;
+  width: 80%;
+  height: 80%;
+
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  &.lightbox--show
+    opacity: 1
+    pointer-events: all
