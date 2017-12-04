@@ -30,6 +30,11 @@ class Flickr {
     listener(this.state.photos, this.state.search);
   }
 
+  getLargeFromSmall(small) {
+    if (typeof small !== 'string') return small;
+    return small.replace(/_m\.jpg/, '_b.jpg');
+  }
+
   photo(photo) {
     const small = photo.media.m
     const large = small.replace(/_m\.jpg/, '_b.jpg');

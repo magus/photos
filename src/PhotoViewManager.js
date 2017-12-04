@@ -23,6 +23,8 @@ export default class PhotoViewManager {
 
       photos.forEach(photo => {
         const img = dom.img(photo.sources.small, photo.title);
+
+        // Add image to container
         this.container.appendChild(img);
 
         // Select first image by default
@@ -75,13 +77,16 @@ export default class PhotoViewManager {
     this.state.selected = img;
 
     this.lightbox.classList.add('lightbox--show');
-    this.lightboxImage.src = img.src;
+
+    // Get large image for lightbox
+    this.lightboxImage.src = this.api.getLargeFromSmall(img.src);
   }
 
   hideLightbox() {
     console.debug('hide lightbox');
     this.state.isLightbox = false;
     this.lightbox.classList.remove('lightbox--show');
+    this.lightboxImage.removeAttribute('src');
   }
 
   next() {

@@ -13,9 +13,8 @@ body
     margin: 16px
 
 #lightbox
-  pointer-events: none
   opacity: 0
-  transition: 0.2s ease-in-out opacity
+  pointer-events: none
 
   position: absolute
   top: 0
@@ -31,10 +30,6 @@ body
   justify-content: center
   align-items: center
 
-  &.lightbox--show
-    opacity: 1
-    pointer-events: all
-
   #lightbox-shadow
     position: absolute
     width: 100%
@@ -43,5 +38,16 @@ body
 
   #lightbox-photo
     position: absolute
+    width: 80%
+
+    opacity: 0
+    transition: 0.2s ease-in-out opacity
+
+  &.lightbox--show
+    opacity: 1
+    pointer-events: all
+
+    #lightbox-photo
+      opacity: 1
 
 
