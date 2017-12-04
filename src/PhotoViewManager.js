@@ -16,6 +16,8 @@ export default class PhotoViewManager {
     this.lightboxImage = props.lightbox.querySelector('img');
     this.lightboxShadow = props.lightbox.querySelector('#lightbox-shadow');
     this.lightboxTitle = props.lightbox.querySelector('#lightbox-title');
+    this.lightboxNext = props.lightbox.querySelector('#lightbox-next');
+    this.lightboxPrev = props.lightbox.querySelector('#lightbox-prev');
 
     // state
     this.state = {
@@ -23,6 +25,9 @@ export default class PhotoViewManager {
       selected: 0,
       isLightbox: false,
     };
+
+    this.next = this.next.bind(this);
+    this.prev = this.prev.bind(this);
 
     this.api.onLoad((photos, search) => {
       // Clear existing images
@@ -72,6 +77,9 @@ export default class PhotoViewManager {
         this.prev();
       }
     });
+
+    this.lightboxNext.addEventListener('click', this.next);
+    this.lightboxPrev.addEventListener('click', this.prev);
   }
 
   isValidIndex(index) {

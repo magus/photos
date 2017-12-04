@@ -1,3 +1,6 @@
+$NavSize: 20px
+$NavColor: rgba(255, 255, 255, 0.3)
+
 body
   background-color: white
   font-family: sans-serif
@@ -48,6 +51,30 @@ body
 
   #lightbox-title
     display: none
+
+  .lightbox-nav
+    cursor: pointer
+    z-index: 1
+    position: absolute
+
+    transform: rotate(45deg)
+    border-radius: 4px
+    width: 50px
+    height: 50px
+    z-index: 1
+    color: black
+    font-size: 50px
+    line-height: 50px
+
+  #lightbox-prev
+    left: $NavSize
+    border-left: $NavSize solid $NavColor
+    border-bottom: $NavSize solid $NavColor
+
+  #lightbox-next
+    right: $NavSize
+    border-right: $NavSize solid $NavColor
+    border-top: $NavSize solid $NavColor
 
   &.lightbox--show
     opacity: 1
