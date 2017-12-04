@@ -1,25 +1,11 @@
 //@flow
 import Flickr from 'Flickr';
+import PhotoViewManager from 'PhotoViewManager';
 import { dom, log } from 'utils';
 
-const CONTAINER = document.getElementById('photos');
-
-function addImage(img) {
-  CONTAINER.appendChild(img);
-}
-
-Flickr.onLoad((photos, search) => {
-  // Clear existing images
-  CONTAINER.innerHTML = null;
-
-  log.info(search, photos);
-
-  photos.forEach(photo => {
-    const img = dom.img(photo.sources.small, photo.title);
-    addImage(img);
-  });
+const photos = new PhotoViewManager({
+  api: Flickr,
+  container: document.getElementById('photos'),
 });
 
-Flickr.search('cats');
-
-setTimeout(() => Flickr.search('dogs'), 5000);
+photos.search('cats');
