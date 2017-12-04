@@ -1,6 +1,13 @@
 // @flow
 import { dom, log } from 'utils';
 
+
+function onImageLoad(src, onLoad) {
+  const img = new Image();
+  img.onload = () => onLoad(src);
+  img.src = src;
+}
+
 export default class PhotoViewManager {
   constructor(props) {
     this.api = props.api;
@@ -11,7 +18,8 @@ export default class PhotoViewManager {
 
     // state
     this.state = {
-      selected: null,
+      photos: [],
+      selected: 0,
       isLightbox: false,
     };
 
@@ -21,28 +29,28 @@ export default class PhotoViewManager {
 
       log.info(search, photos);
 
+      this.state.photos = [];
       photos.forEach(photo => {
         const img = dom.img(photo.sources.small, photo.title);
 
         // Add image to container
         this.container.appendChild(img);
 
-        // Select first image by default
-        if (!this.state.selected) this.state.selected = img;
+        // Store node ref with photo
+        this.state.photos.push(Object.assign({}, photo, { node: img }));
+      });
+
+      // Attach click handlers after placing in dom
+      this.state.photos.forEach((photo, i) => {
+        photo.node.addEventListener('click', (event) => {
+          this.showLightbox(i);
+        });
       });
     });
 
-    document.body.addEventListener('click', (event) => {
-      const { isLightbox } = this.state;
-
-      if (event.target.nodeName === 'IMG' && !isLightbox) {
-        this.showLightbox(event.target);
-      }
-
+    this.lightboxShadow.addEventListener('click', (event) => {
       // Clicked lightbox shadow, hide lightbox
-      if (isLightbox && event.target === this.lightboxShadow) {
-        this.hideLightbox();
-      }
+      this.hideLightbox();
     });
 
     window.addEventListener('keyup', (event) => {
@@ -65,21 +73,33 @@ export default class PhotoViewManager {
     });
   }
 
+  isValidIndex(index) {
+    if (typeof index !== 'number') return false;
+    if (index < 0 || index >= this.state.photos.length) return false;
+
+    return true;
+  }
+
   search(search) {
     this.api.search(search);
   }
 
-  showLightbox(img) {
-    if (!img) return console.error('invalid img');
+  showLightbox(index) {
+    if (!this.isValidIndex(index)) return console.error('invalid index');
 
     console.debug('show lightbox');
     this.state.isLightbox = true;
-    this.state.selected = img;
+    this.state.selected = index;
 
     this.lightbox.classList.add('lightbox--show');
 
+    const photo = this.state.photos[index];
+    if (!photo) return console.error('invalid photo');
+
     // Get large image for lightbox
-    this.lightboxImage.src = this.api.getLargeFromSmall(img.src);
+    onImageLoad(photo.sources.large, (src) => {
+      this.lightboxImage.src = src;
+    });
   }
 
   hideLightbox() {
@@ -91,15 +111,17 @@ export default class PhotoViewManager {
 
   next() {
     console.debug('next');
-    if (!this.state.selected) return;
+    const { selected } = this.state;
+    if (!this.isValidIndex(selected)) return console.error('invalid index');
 
-    this.showLightbox(this.state.selected.nextSibling);
+    this.showLightbox(selected + 1);
   }
 
   prev() {
     console.debug('prev');
-    if (!this.state.selected) return;
+    const { selected } = this.state;
+    if (!this.isValidIndex(selected)) return console.error('invalid index');
 
-    this.showLightbox(this.state.selected.previousSibling);
+    this.showLightbox(selected - 1);
   }
 }
