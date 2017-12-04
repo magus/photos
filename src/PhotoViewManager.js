@@ -5,14 +5,13 @@ export default class PhotoViewManager {
   constructor(props) {
     this.api = props.api;
     this.container = props.container;
-
-    // Create lightbox
-    this.lightbox = dom.create('div');
-    this.lightbox.id = 'lightbox';
-    document.body.appendChild(this.lightbox);
+    this.lightbox = props.lightbox;
+    this.lightboxImage = props.lightbox.querySelector('img');
+    this.lightboxShadow = props.lightbox.querySelector('#lightbox-shadow');
 
     // state
     this.state = {
+      selected: null,
       isLightbox: false,
     };
 
@@ -32,11 +31,11 @@ export default class PhotoViewManager {
       const { isLightbox } = this.state;
 
       if (event.target.nodeName === 'IMG' && !isLightbox) {
-        this.showLightbox();
+        this.showLightbox(event.target);
       }
 
-      // Clicked outside lightbox, hide lightbox
-      if (isLightbox && !this.lightbox.contains(event.target)) {
+      // Clicked lightbox shadow, hide lightbox
+      if (isLightbox && event.target === this.lightboxShadow) {
         this.hideLightbox();
       }
     });
@@ -45,8 +44,10 @@ export default class PhotoViewManager {
       // console.debug('keyup', event.key);
       if (event.key === 'ArrowRight') {
         console.debug('next');
+        this.showLightbox(this.state.selected.nextSibling);
       } else if (event.key === 'ArrowLeft') {
         console.debug('prev');
+        this.showLightbox(this.state.selected.previousSibling);
       }
     });
   }
@@ -55,10 +56,15 @@ export default class PhotoViewManager {
     this.api.search(search);
   }
 
-  showLightbox() {
+  showLightbox(img) {
+    if (!img) return console.error('invalid img');
+
     console.debug('show lightbox');
     this.state.isLightbox = true;
+    this.state.selected = img;
+
     this.lightbox.classList.add('lightbox--show');
+    this.lightboxImage.src = img.src;
   }
 
   hideLightbox() {
