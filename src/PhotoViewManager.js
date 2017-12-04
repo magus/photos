@@ -46,11 +46,9 @@ export default class PhotoViewManager {
     window.addEventListener('keyup', (event) => {
       // console.debug('keyup', event.key);
       if (event.key === 'ArrowRight') {
-        console.debug('next');
-        this.showLightbox(this.state.selected.nextSibling);
+        this.next();
       } else if (event.key === 'ArrowLeft') {
-        console.debug('prev');
-        this.showLightbox(this.state.selected.previousSibling);
+        this.prev();
       }
     });
 
@@ -58,11 +56,9 @@ export default class PhotoViewManager {
       console.debug('swipeDir', swipeDir);
 
       if (swipeDir === 'left') {
-        console.debug('next');
-        this.showLightbox(this.state.selected.nextSibling);
+        this.next();
       } else if (swipeDir === 'right') {
-        console.debug('prev');
-        this.showLightbox(this.state.selected.previousSibling);
+        this.prev();
       }
     });
   }
@@ -86,5 +82,19 @@ export default class PhotoViewManager {
     console.debug('hide lightbox');
     this.state.isLightbox = false;
     this.lightbox.classList.remove('lightbox--show');
+  }
+
+  next() {
+    console.debug('next');
+    if (!this.state.selected) return;
+
+    this.showLightbox(this.state.selected.nextSibling);
+  }
+
+  prev() {
+    console.debug('prev');
+    if (!this.state.selected) return;
+
+    this.showLightbox(this.state.selected.previousSibling);
   }
 }
